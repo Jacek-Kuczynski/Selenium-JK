@@ -18,6 +18,7 @@ public class HotelMyAccountPage {
     }
 
     public String getPageTitle(){
+
         return this.driver.getTitle();
     }
 }

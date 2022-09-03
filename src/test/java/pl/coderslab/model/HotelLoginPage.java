@@ -18,4 +18,5 @@ public class HotelLoginPage {
         registerEmailInput.sendKeys(email);
         registerEmailInput.submit();
     }
+
 }
