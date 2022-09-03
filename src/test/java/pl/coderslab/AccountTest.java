@@ -1,17 +1,22 @@
-package pl.coderslab;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+        package pl.coderslab;
 
-import java.time.Duration;
-import java.util.Random;
+        import org.junit.After;
+        import org.junit.Before;
+        import org.junit.Test;
+        import org.openqa.selenium.By;
+        import org.openqa.selenium.WebDriver;
+        import org.openqa.selenium.WebElement;
+        import org.openqa.selenium.chrome.ChromeDriver;
+        import pl.coderslab.model.HotelCreateAnAccountPage;
+        import pl.coderslab.model.HotelLoginPage;
+        import pl.coderslab.model.HotelMainPage;
+        import pl.coderslab.model.HotelMyAccountPage;
 
-import static org.junit.Assert.assertEquals;
+        import java.time.Duration;
+        import java.util.Random;
+
+        import static org.junit.Assert.assertEquals;
 
 public class AccountTest {
 
@@ -42,55 +47,22 @@ public class AccountTest {
         // Wejdz na strone glowna
         this.driver.get("https://hotel-testlab.coderslab.pl/en/");
 
-        // Wyszukaj przycisk do logowania
-        WebElement signInButton = this.driver.findElement(By.className("user_login"));
-        signInButton.click(); // Kliknij na przycisk SignIn
+        HotelMainPage hotelMainPage = new HotelMainPage(this.driver);
+        hotelMainPage.clickSignIn();
 
-        WebElement registerEmailInput = this.driver.findElement(By.id("email_create"));
-        registerEmailInput.clear(); // Wyczysc pole tekstowe przed wpisaniem
-        registerEmailInput.sendKeys(email);
-        registerEmailInput.submit(); // Potwierdz email do rejestracji
+        HotelLoginPage hotelLoginPage = new HotelLoginPage(this.driver);
+        hotelLoginPage.createAnAccountWithEmail(email);
 
-        // Wyszukaj podstawowe elementy do zalozenia uzytkownika
-        WebElement customerFirstNameInput = this.driver.findElement(By.id("customer_firstname"));
-        WebElement customerLastNameInput = this.driver.findElement(By.id("customer_lastname"));
-//        WebElement customerEmail = driver.findElement(By.id("email"));
-        WebElement customerPassword = this.driver.findElement(By.id("passwd"));
+        HotelCreateAnAccountPage hotelCreateAnAccountPage = new HotelCreateAnAccountPage(this.driver);
+        hotelCreateAnAccountPage.fillFormAndSubmit("Janusz", "Januszewski", "12345");
 
-        // Wypelnij brakujace informacje o uzytkowniku
-        customerFirstNameInput.clear();
-        customerFirstNameInput.sendKeys("Janusz");
-        customerLastNameInput.clear();
-        customerLastNameInput.sendKeys("Januszewski");
-
-        customerPassword.clear();
-        customerPassword.sendKeys("12345");
-
-        // Zaloz konto
-        WebElement submitButton = this.driver.findElement(By.id("submitAccount"));
-        submitButton.click();
-
-        // Sprawdz czy konto poprawnie zalozone
-        WebElement successAlertField = this.driver.findElement(By.className("alert-success"));
-
-        // Pobierz informacje o poprawnym zalozeniu konta
-        String alertText = successAlertField.getText();
-
-        // Zweryfikuj komunikat.
+        HotelMyAccountPage hotelMyAccountPage = new HotelMyAccountPage(driver);
+        String alertText = hotelMyAccountPage.getAlertText();
         assertEquals(expectedAlertText, alertText);
 
-        String pageTitle = this.driver.getTitle();
-
+        String pageTitle = hotelMyAccountPage.getPageTitle();
         assertEquals("My account - MyBooking", pageTitle);
+
     }
 
 }
-
-
-
-
-
-
-
-
-
